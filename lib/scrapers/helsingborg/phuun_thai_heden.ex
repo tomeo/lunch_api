@@ -14,9 +14,9 @@ defmodule LunchApi.Scrapers.Helsingborg.PhuunThaiHeden do
     |> Enum.map(&String.capitalize/1)
     |> Enum.map(fn dish -> %{ dish: dish, price: "109" } end)
 
-    %{
+    [%{
       name: "Phuun Thai Heden",
       dishes: dishes
-    }
+    }]
   end
 end

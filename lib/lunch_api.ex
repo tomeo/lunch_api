@@ -23,23 +23,35 @@ defmodule LunchApi do
   end
 
   get "/helsingborg/ramlosa" do
-    menu =
-      [Grytan.menu()]
-      ++ [PhuunThaiHeden.menu()]
+    tasks = [
+      Task.async(fn -> Grytan.menu() end),
+      Task.async(fn -> PhuunThaiHeden.menu() end)
+    ]
 
-    conn
-    |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(menu))
+    fetch_menus_concurrently(tasks)
+    |> return_json(conn)
   end
 
   get "/helsingborg" do
-    menu = MatOchMat.city("helsingborg")
-    ++ [Grytan.menu()]
-    ++ [PhuunThaiHeden.menu()]
+    tasks = [
+      Task.async(fn -> MatOchMat.city("helsingborg") end),
+      Task.async(fn -> Grytan.menu() end),
+      Task.async(fn -> PhuunThaiHeden.menu() end)
+    ]
 
+    fetch_menus_concurrently(tasks)
+    |> return_json(conn)
+  end
+
+  defp return_json(data, conn) do
     conn
     |> put_resp_content_type("application/json")
-    |> send_resp(200, Jason.encode!(menu))
+    |> send_resp(200, Jason.encode!(data))
+  end
+
+  defp fetch_menus_concurrently(tasks) do
+    Enum.map(tasks, &Task.await/1)
+    |> Enum.concat
   end
 
   match _ do

@@ -32,10 +32,10 @@ defmodule LunchApi.Scrapers.Helsingborg.Grytan do
     dishes = dailies ++ [weekly]
     |> Enum.map(fn dish -> %{ dish: dish, price: "135" } end)
 
-    %{
+    [%{
       name: "Grytan",
       dishes: dishes
-    }
+    }]
   end
 
   defp clean(str) do
