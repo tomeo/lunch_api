@@ -18,8 +18,20 @@ defmodule LunchApi do
     |> send_resp(200, Jason.encode!(menu))
   end
 
+  get "/helsingborg/ramlosa" do
+    menu = LunchApi.Scrapers.Helsingborg.Grytan.menu()
+
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(200, Jason.encode!(menu))
+  end
+
   get "/helsingborg" do
-    menu = LunchApi.Scrapers.Aggregators.MatOchMat.city("helsingborg")
+    mat_och_mat = LunchApi.Scrapers.Aggregators.MatOchMat.city("helsingborg")
+    grytan = LunchApi.Scrapers.Helsingborg.Grytan.menu()
+
+    menu = mat_och_mat
+    ++ [grytan]
 
     conn
     |> put_resp_content_type("application/json")
