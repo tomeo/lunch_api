@@ -1,3 +1,7 @@
+alias LunchApi.Scrapers.Aggregators.MatOchMat
+alias LunchApi.Scrapers.Helsingborg.Grytan
+alias LunchApi.Scrapers.Helsingborg.PhuunThaiHeden
+
 defmodule LunchApi do
   use Plug.Router
 
@@ -10,7 +14,7 @@ defmodule LunchApi do
       "Brasseriet",
       "Backhaus Oceanhamnen"
     ]
-    menu = LunchApi.Scrapers.Aggregators.MatOchMat.city("helsingborg")
+    menu = MatOchMat.city("helsingborg")
     |> Enum.filter(fn restaurant -> Enum.member?(restaurants, restaurant.name) end)
 
     conn
@@ -19,7 +23,9 @@ defmodule LunchApi do
   end
 
   get "/helsingborg/ramlosa" do
-    menu = LunchApi.Scrapers.Helsingborg.Grytan.menu()
+    menu =
+      [Grytan.menu()]
+      ++ [PhuunThaiHeden.menu()]
 
     conn
     |> put_resp_content_type("application/json")
@@ -27,11 +33,9 @@ defmodule LunchApi do
   end
 
   get "/helsingborg" do
-    mat_och_mat = LunchApi.Scrapers.Aggregators.MatOchMat.city("helsingborg")
-    grytan = LunchApi.Scrapers.Helsingborg.Grytan.menu()
-
-    menu = mat_och_mat
-    ++ [grytan]
+    menu = MatOchMat.city("helsingborg")
+    ++ [Grytan.menu()]
+    ++ [PhuunThaiHeden.menu()]
 
     conn
     |> put_resp_content_type("application/json")
