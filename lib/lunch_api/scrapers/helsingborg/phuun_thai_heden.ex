@@ -1,4 +1,4 @@
-defmodule LunchApi.Scrapers.Helsingborg.PhuunThaiHeden do
+defmodule LunchApiWeb.Scrapers.Helsingborg.PhuunThaiHeden do
   use HTTPoison.Base
 
   def menu() do

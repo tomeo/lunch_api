@@ -1,4 +1,4 @@
-defmodule LunchApi.Scrapers.Helsingborg.Grytan do
+defmodule LunchApiWeb.Scrapers.Helsingborg.Grytan do
   use HTTPoison.Base
 
   def menu() do
@@ -11,6 +11,7 @@ defmodule LunchApi.Scrapers.Helsingborg.Grytan do
     text = parsed_html
     |> Floki.find("div#comp-kv23q6hz span")
     |> Enum.map(&Floki.text/1)
+    |> Enum.map(&String.replace(&1, "Veckans vegetariska", "Veckans"))
     |> Enum.join("\n")
 
     week = [
@@ -21,10 +22,10 @@ defmodule LunchApi.Scrapers.Helsingborg.Grytan do
       text |> between_days("Fredag", "Veckans"),
     ]
 
-    dailies = week |> Enum.at(weekday_number() - 1 |> min(5))
+    dailies = week |> Enum.at(weekday_number() - 1 |> min(4))
 
     weekly = text
-    |> String.split("Veckans ", parts: 2)
+    |> String.split("Veckans", parts: 2)
     |> List.last()
     |> String.trim()
     |> clean
@@ -42,6 +43,7 @@ defmodule LunchApi.Scrapers.Helsingborg.Grytan do
     str
     |> String.replace("\n", "")
     |> String.replace("\u200B", "")
+    |> String.replace(":", "")
     |> String.trim()
   end
 

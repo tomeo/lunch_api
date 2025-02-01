@@ -1,4 +1,4 @@
-defmodule LunchApi.Scrapers.Aggregators.MatOchMat do
+defmodule LunchApiWeb.Scrapers.Aggregators.MatOchMat do
   use HTTPoison.Base
 
   def city(city) do
