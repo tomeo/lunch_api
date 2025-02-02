@@ -8,11 +8,20 @@ defmodule LunchApiWeb.Router do
   scope "/", LunchApiWeb do
     pipe_through :api
 
-    get "/helsingborg", HelsingborgController, :index
-    get "/helsingborg/oceanhamnen", HelsingborgController, :oceanhamnen
-    get "/helsingborg/ramlosa", HelsingborgController, :ramlosa
-    get "/karlskrona", KarlskronaController, :index
-    get "/trelleborg", TrelleborgController, :index
+    match :get, "/helsingborg", HelsingborgController, :index
+    match :post, "/helsingborg", HelsingborgController, :index
+
+    match :get, "/helsingborg/oceanhamnen", HelsingborgController, :oceanhamnen
+    match :post, "/helsingborg/oceanhamnen", HelsingborgController, :oceanhamnen
+
+    match :get, "/helsingborg/ramlosa", HelsingborgController, :ramlosa
+    match :post, "/helsingborg/ramlosa", HelsingborgController, :ramlosa
+
+    match :get, "/karlskrona", KarlskronaController, :index
+    match :post, "/karlskrona", KarlskronaController, :index
+
+    match :get, "/trelleborg", TrelleborgController, :index
+    match :post, "/trelleborg", TrelleborgController, :index
   end
 
   if Application.compile_env(:lunch_api, :dev_routes) do

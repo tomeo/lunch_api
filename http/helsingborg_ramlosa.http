@@ -1,0 +1,5 @@
+GET http://localhost:4001/helsingborg/ramlosa
+
+###
+
+POST http://localhost:4001/helsingborg/ramlosa
