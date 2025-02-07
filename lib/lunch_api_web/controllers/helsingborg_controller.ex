@@ -28,14 +28,12 @@ defmodule LunchApiWeb.HelsingborgController do
   end
 
   def oceanhamnen(conn, _params) do
-    restaurants = [
-      "Brasseriet",
-      "Backhaus Oceanhamnen"
+    tasks = [
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "brasseriet") end),
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "backhaus-oceanhamnen") end)
     ]
-    menu = MatOchMat.city("helsingborg")
-    |> Enum.filter(fn restaurant -> Enum.member?(restaurants, restaurant.name) end)
 
-    menus = fetch_menus_concurrently(menu)
+    menus = fetch_menus_concurrently(tasks)
 
     json(conn, menus)
   end
