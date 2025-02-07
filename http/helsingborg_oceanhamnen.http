@@ -3,3 +3,9 @@ GET http://localhost:4001/helsingborg/oceanhamnen
 ###
 
 POST http://localhost:4001/helsingborg/oceanhamnen
+
+###
+
+POST http://localhost:4001/helsingborg/oceanhamnen
+x-slack-signature: test
+x-slack-request-timestamp: 1700000000
