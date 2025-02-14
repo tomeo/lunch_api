@@ -78,7 +78,7 @@ defmodule LunchApiWeb.Scrapers.Aggregators.MatOchMat do
     |> String.trim()
 
     %{
-      dish: "#{main} #{side}",
+      dish: "#{main} - #{side}",
       price: price,
     }
   end
