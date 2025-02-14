@@ -68,7 +68,7 @@ defmodule LunchApiWeb.Scrapers.Aggregators.MatOchMat do
     |> String.trim()
 
     main = data
-    |> Floki.find("span.lunchDish__name--withDots")
+    |> Floki.find("span.lunchDish__name")
     |> Floki.text()
     |> String.trim()
 
