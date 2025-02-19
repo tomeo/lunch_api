@@ -14,7 +14,7 @@ defmodule LunchApiWeb.KarlskronaController do
   end
 
   defp fetch_menus_concurrently(tasks) do
-    Enum.map(tasks, &Task.await/1)
-    |> Enum.concat
+    Task.await_many(tasks)
+    |> Enum.concat()
   end
 end
