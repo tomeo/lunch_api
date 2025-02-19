@@ -16,7 +16,8 @@ defmodule LunchApi.Application do
       # Start a worker by calling: LunchApi.Worker.start_link(arg)
       # {LunchApi.Worker, arg},
       # Start to serve requests, typically the last entry
-      LunchApiWeb.Endpoint
+      LunchApiWeb.Endpoint,
+      LunchApi.Cache,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

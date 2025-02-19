@@ -44,6 +44,7 @@ defmodule LunchApi.MixProject do
       {:bandit, "~> 1.5"},
       {:httpoison, "~> 1.8"},
       {:floki, "~> 0.30"},
+      {:nebulex, "~> 2.0"},
     ]
   end
 

@@ -30,6 +30,10 @@ config :lunch_api, LunchApiWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :lunch_api, LunchApi.Mailer, adapter: Swoosh.Adapters.Local
 
+config :lunch_api, LunchApi.Cache,
+  adapter: Nebulex.Adapters.Local,
+  gc_interval: :timer.minutes(30)
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

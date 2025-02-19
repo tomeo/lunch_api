@@ -36,6 +36,19 @@ defmodule LunchApiWeb.HelsingborgController do
   end
 
   def oceanhamnen(conn, _params) do
+    cache_key = "oceanhamnen_#{Date.utc_today()}"
+
+    menus =
+      LunchApi.Cache.get(cache_key) || fetch_and_cache_menus(cache_key)
+
+    if slack_request?(conn) do
+      text(conn, format_for_slack(menus))
+    else
+      json(conn, menus)
+    end
+  end
+
+  defp fetch_and_cache_menus(cache_key) do
     tasks = [
       Task.async(fn -> MatOchMat.restaurant("helsingborg", "brasseriet") end),
       Task.async(fn -> MatOchMat.restaurant("helsingborg", "backhaus-oceanhamnen") end)
@@ -43,11 +56,10 @@ defmodule LunchApiWeb.HelsingborgController do
 
     menus = LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
 
-    if slack_request?(conn) do
-      text(conn, format_for_slack(menus))
-    else
-      json(conn, menus)
-    end
+    # Cache for 6 hours
+    LunchApi.Cache.put(cache_key, menus, ttl: :timer.hours(6))
+
+    menus
   end
 
   defp slack_request?(conn) do
