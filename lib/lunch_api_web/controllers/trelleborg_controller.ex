@@ -8,13 +8,8 @@ defmodule LunchApiWeb.TrelleborgController do
       Task.async(fn -> MatOchMat.city("trelleborg") end),
     ]
 
-    menus = fetch_menus_concurrently(tasks)
+    menus = LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
 
     json(conn, menus)
-  end
-
-  defp fetch_menus_concurrently(tasks) do
-    Task.await_many(tasks)
-    |> Enum.concat()
   end
 end

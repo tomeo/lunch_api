@@ -11,7 +11,7 @@ defmodule LunchApiWeb.HelsingborgController do
       Task.async(fn -> PhuunThaiHeden.menu() end)
     ]
 
-    menus = fetch_menus_concurrently(tasks)
+    menus = LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
 
     if slack_request?(conn) do
       text(conn, format_for_slack(menus))
@@ -26,7 +26,7 @@ defmodule LunchApiWeb.HelsingborgController do
       Task.async(fn -> PhuunThaiHeden.menu() end)
     ]
 
-    menus = fetch_menus_concurrently(tasks)
+    menus = LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
 
     if slack_request?(conn) do
       text(conn, format_for_slack(menus))
@@ -41,18 +41,13 @@ defmodule LunchApiWeb.HelsingborgController do
       Task.async(fn -> MatOchMat.restaurant("helsingborg", "backhaus-oceanhamnen") end)
     ]
 
-    menus = fetch_menus_concurrently(tasks)
+    menus = LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
 
     if slack_request?(conn) do
       text(conn, format_for_slack(menus))
     else
       json(conn, menus)
     end
-  end
-
-  defp fetch_menus_concurrently(tasks) do
-    Task.await_many(tasks)
-    |> Enum.concat()
   end
 
   defp slack_request?(conn) do
