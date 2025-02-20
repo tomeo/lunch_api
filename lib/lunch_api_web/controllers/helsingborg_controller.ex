@@ -51,7 +51,12 @@ defmodule LunchApiWeb.HelsingborgController do
   defp fetch_and_cache_menus(cache_key) do
     tasks = [
       Task.async(fn -> MatOchMat.restaurant("helsingborg", "brasseriet") end),
-      Task.async(fn -> MatOchMat.restaurant("helsingborg", "backhaus-oceanhamnen") end)
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "backhaus-oceanhamnen") end),
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "hamnkrogen-hbg") end),
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "at-mollberg") end),
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "bastard-burgers-helsingborg") end),
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "fahlmans-konditori") end),
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "fahlmans-konditori") end),
     ]
 
     menus = LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
