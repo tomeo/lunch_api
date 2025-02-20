@@ -48,7 +48,7 @@ defmodule LunchApiWeb.HelsingborgController do
       Task.async(fn -> MatOchMat.restaurant("helsingborg", "at-mollberg") end),
       Task.async(fn -> MatOchMat.restaurant("helsingborg", "bastard-burgers-helsingborg") end),
       Task.async(fn -> MatOchMat.restaurant("helsingborg", "fahlmans-konditori") end),
-      Task.async(fn -> MatOchMat.restaurant("helsingborg", "fahlmans-konditori") end),
+      Task.async(fn -> MatOchMat.restaurant("helsingborg", "restaurang-telegrafen") end),
     ]
 
     menus =
