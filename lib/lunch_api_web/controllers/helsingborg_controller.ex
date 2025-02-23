@@ -74,7 +74,7 @@ defmodule LunchApiWeb.HelsingborgController do
     menus = LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
 
     # Cache for 6 hours
-    LunchApi.Cache.put(cache_key, menus, ttl: :timer.hours(6))
+    LunchApi.Cache.put(cache_key, menus, ttl: :timer.hours(24))
 
     menus
   end
