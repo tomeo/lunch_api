@@ -4,7 +4,7 @@ defmodule LunchApi.MenuService do
   """
 
   def get_menus(nil, tasks) do
-    LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
+    fetch_menus_concurrently(tasks)
   end
 
   def get_menus(cache_key, tasks) do
@@ -12,9 +12,14 @@ defmodule LunchApi.MenuService do
   end
 
   defp fetch_and_cache_menus(cache_key, tasks) do
-    menus = LunchApi.MenuFetcher.fetch_menus_concurrently(tasks)
+    menus = fetch_menus_concurrently(tasks)
     # Cache for 24 hours
     LunchApi.Cache.put(cache_key, menus, ttl: :timer.hours(24))
     menus
+  end
+
+  defp fetch_menus_concurrently(tasks) do
+    Task.await_many(tasks)
+    |> Enum.concat()
   end
 end
