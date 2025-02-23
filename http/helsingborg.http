@@ -1,0 +1,11 @@
+GET http://localhost:4001/helsingborg
+
+###
+
+POST http://localhost:4001/helsingborg
+
+###
+
+POST http://localhost:4001/helsingborg
+x-slack-signature: test
+x-slack-request-timestamp: 1700000000
