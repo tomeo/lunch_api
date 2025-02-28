@@ -8,6 +8,8 @@ defmodule LunchApiWeb.Router do
   scope "/", LunchApiWeb do
     pipe_through :api
 
+    get "/", RootController, :index
+
     get "/helsingborg", HelsingborgController, :index
     post "/helsingborg", HelsingborgController, :index
 
