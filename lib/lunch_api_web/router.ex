@@ -8,21 +8,13 @@ defmodule LunchApiWeb.Router do
   scope "/", LunchApiWeb do
     pipe_through :api
 
-    match :get, "/helsingborg", HelsingborgController, :index
-    match :post, "/helsingborg", HelsingborgController, :index
-
-    match :get, "/helsingborg/oceanhamnen", HelsingborgController, :oceanhamnen
-    match :post, "/helsingborg/oceanhamnen", HelsingborgController, :oceanhamnen
-
-    match :get, "/helsingborg/ramlosa", HelsingborgController, :ramlosa
-    match :post, "/helsingborg/ramlosa", HelsingborgController, :ramlosa
-
-    match :get, "/karlskrona", KarlskronaController, :index
-    match :post, "/karlskrona", KarlskronaController, :index
-
-    match :get, "/trelleborg", TrelleborgController, :index
-    match :post, "/trelleborg", TrelleborgController, :index
+    match [:get, :post], "/helsingborg", HelsingborgController, :index
+    match [:get, :post], "/helsingborg/oceanhamnen", HelsingborgController, :oceanhamnen
+    match [:get, :post], "/helsingborg/ramlosa", HelsingborgController, :ramlosa
+    match [:get, :post], "/karlskrona", KarlskronaController, :index
+    match [:get, :post], "/trelleborg", TrelleborgController, :index
   end
+
 
   if Application.compile_env(:lunch_api, :dev_routes) do
     import Phoenix.LiveDashboard.Router
