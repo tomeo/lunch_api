@@ -1,66 +1,32 @@
-alias LunchApiWeb.Scrapers.Helsingborg.{Grytan, PhuunThaiHeden}
-alias LunchApiWeb.Scrapers.Aggregators.MatOchMat
-alias LunchApi.MenuService
-alias LunchApiWeb.SlackResponder
-
 defmodule LunchApiWeb.HelsingborgController do
   use LunchApiWeb, :controller
+  alias LunchApi.DataFetcher
+  alias LunchApi.Cache
+  alias LunchApiWeb.SlackResponder
 
   def index(conn, _params) do
     cache_key = "helsingborg_#{Date.utc_today()}"
-
-    tasks =
-      [
-        fn -> MatOchMat.city("helsingborg") end,
-        fn -> Grytan.menu() end,
-        fn -> PhuunThaiHeden.menu() end
-      ]
-      |> Enum.map(&Task.async/1)
-
-    handle_request(conn, cache_key, tasks)
+    data = Cache.get_or_fetch(cache_key, &DataFetcher.fetch_helsingborg_data/0)
+    respond(conn, data)
   end
 
   def ramlosa(conn, _params) do
     cache_key = "ramlosa_#{Date.utc_today()}"
-
-    tasks =
-      [
-        fn -> Grytan.menu() end,
-        fn -> PhuunThaiHeden.menu() end
-      ]
-      |> Enum.map(&Task.async/1)
-
-    handle_request(conn, cache_key, tasks)
+    data = Cache.get_or_fetch(cache_key, &DataFetcher.fetch_ramlosa_data/0)
+    respond(conn, data)
   end
 
   def oceanhamnen(conn, _params) do
     cache_key = "oceanhamnen_#{Date.utc_today()}"
-
-    restaurants = [
-      "brasseriet",
-      "backhaus-oceanhamnen",
-      "hamnkrogen-hbg",
-      "at-mollberg",
-      "bastard-burgers-helsingborg",
-      "fahlmans-konditori",
-      "restaurang-telegrafen"
-    ]
-
-    tasks =
-      Enum.map(restaurants, fn restaurant ->
-        Task.async(fn -> MatOchMat.restaurant("helsingborg", restaurant) end)
-      end)
-
-    handle_request(conn, cache_key, tasks)
+    data = Cache.get_or_fetch(cache_key, &DataFetcher.fetch_oceanhamnen_data/0)
+    respond(conn, data)
   end
 
-  defp handle_request(conn, cache_key, tasks) do
-    menus = MenuService.get_menus(cache_key, tasks)
-
+  defp respond(conn, data) do
     if SlackResponder.slack_request?(conn) do
-      text(conn, SlackResponder.format_response(menus))
+      text(conn, SlackResponder.format_response(data))
     else
-      json(conn, menus)
+      json(conn, data)
     end
   end
 end

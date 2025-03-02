@@ -8,16 +8,22 @@ defmodule LunchApiWeb.SlackResponder do
 
   def format_response(menus) do
     menus
+    |> List.flatten()  # Flatten the list if it contains nested lists
     |> Enum.map(fn menu ->
+      name = Map.get(menu, :name, "Unknown")
+      dishes = Map.get(menu, :dishes, [])
+
       dishes_text =
-        menu.dishes
+        dishes
         |> Enum.map(fn dish ->
-          price_text = if dish.price != "", do: " (#{dish.price} kr)", else: ""
-          "- #{dish.dish}#{price_text}"
+          dish_name = Map.get(dish, :dish, "Unknown Dish")
+          price = Map.get(dish, :price, "")
+          price_text = if price != "", do: " (#{price} kr)", else: ""
+          "- #{dish_name}#{price_text}"
         end)
         |> Enum.join("\n")
 
-      "*#{menu.name}:*\n#{dishes_text}"
+      "*#{name}:*\n#{dishes_text}"
     end)
     |> Enum.join("\n\n")
   end

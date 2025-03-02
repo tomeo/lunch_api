@@ -18,6 +18,7 @@ defmodule LunchApi.Application do
       # Start to serve requests, typically the last entry
       LunchApiWeb.Endpoint,
       LunchApi.Cache,
+      LunchApi.CacheRefresher,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
